@@ -12,8 +12,8 @@ aeg = StringVar()
 aeg.set("00:10")
 taimer = tk.Label(window, textvariable=aeg, font=("consolas", 60))
 taimer.place(relx=.5, rely=.5, anchor="center")
-ttk.Label(frame, text="Sisesta õppimisperioodi pikkus(eeldame, et sisestatakse minutid ja sekundid kujul --> mm:ss):").grid(row=0)
-ttk.Label(frame, text="Sisesta puhkusperioodi pikkus:").grid(row=1)
+ttk.Label(frame, text="Sisesta õppimisperioodi pikkus(eeldame, et sisestatakse (muidu ei tööta) minutid ja sekundid kujul --> mm:ss):").grid(row=0)
+ttk.Label(frame, text="Sisesta puhkusperioodi pikkus(eeldame, et sisestatakse (muidu ei tööta) minutid ja sekundid kujul --> mm:ss):").grid(row=1)
 
 
 õpi_aeg = ttk.Entry(frame) # õpi ja puhkus_aeg on kasutaja poolt määratud ajaperioodid
