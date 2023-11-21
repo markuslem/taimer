@@ -2,6 +2,73 @@ from tkinter import *
 from tkinter import ttk
 import tkinter as tk
 from tkcalendar import *
+from datetime import datetime
+import PySimpleGUI as sg
+
+def keritav(start_hour=None, start_minute=None, start_second=None):
+    def on_wheel(event, element):
+        nonlocal tund, minut, sekund
+        delta = -int(event.delta / 120)
+        if element == "Tund":
+            tund = (tund + delta) % 24
+        elif element == "Minut":
+            minut = (minut + delta) % 60
+        elif element == "Sekund":
+            sekund = (sekund + delta) % 60
+        update_time()
+
+    def update_time():
+        nonlocal tund, minut, sekund
+        tund_label.config(text=f"{tund:0>2d}")
+        minut_label.config(text=f"{minut:0>2d}")
+        sekund_label.config(text=f"{sekund:0>2d}")
+
+    def on_ok():
+        global valik_aeg
+        nonlocal tund, minut, sekund
+        valik_aeg = f"{tund:0>2d}:{minut:0>2d}:{sekund:0>2d}"
+        window.destroy()
+
+    window = Tk()
+    window.title("Vali aeg")
+
+    tund, minut, sekund = 0, 0, 0
+    tund = tund if start_hour is None else max(0, min(int(start_hour), 23))
+    minut = minut if start_minute is None else max(0, min(int(start_minute), 59))
+    sekund = sekund if start_second is None else max(0, min(int(start_second), 59))
+
+    tund_label = Label(window, font=("Courier New", 48, "bold"))
+    minut_label = Label(window, font=("Courier New", 48, "bold"))
+    sekund_label = Label(window, font=("Courier New", 48, "bold"))
+
+    tund_label.grid(row=0, column=0)
+    Label(window, text=":", font=("Courier New", 48, "bold")).grid(row=0, column=1)
+    minut_label.grid(row=0, column=2)
+    Label(window, text=":", font=("Courier New", 48, "bold")).grid(row=0, column=3)
+    sekund_label.grid(row=0, column=4)
+
+    tund_label.config(text=f"{tund:0>2d}")
+    minut_label.config(text=f"{minut:0>2d}")
+    sekund_label.config(text=f"{sekund:0>2d}")
+
+    tund_label.bind("<MouseWheel>", lambda event: on_wheel(event, "Tund"))
+    minut_label.bind("<MouseWheel>", lambda event: on_wheel(event, "Minut"))
+    sekund_label.bind("<MouseWheel>", lambda event: on_wheel(event, "Sekund"))
+
+    ok_button = Button(window, text="OK", command=on_ok)
+    ok_button.grid(row=1, columnspan=5)
+
+    window.mainloop()
+    
+    
+
+keritav()
+õppimine = valik_aeg
+keritav()
+puhkamine = valik_aeg
+print(õppimine)
+print(puhkamine)
+
 window = Tk()
 frame = ttk.Frame(window, padding=10)
 frame.pack()
@@ -9,28 +76,19 @@ frame.place()
 window.geometry("800x600")
 
 aeg = StringVar()
-aeg.set("00:10")
+aeg.set(õppimine)
 taimer = tk.Label(window, textvariable=aeg, font=("consolas", 60))
 taimer.place(relx=.5, rely=.5, anchor="center")
-ttk.Label(frame, text="Sisesta õppimisperioodi pikkus(eeldame, et sisestatakse (muidu ei tööta) minutid ja sekundid kujul --> mm:ss):").grid(row=0)
-ttk.Label(frame, text="Sisesta puhkusperioodi pikkus(eeldame, et sisestatakse (muidu ei tööta) minutid ja sekundid kujul --> mm:ss):").grid(row=1)
-
-
-õpi_aeg = ttk.Entry(frame) # õpi ja puhkus_aeg on kasutaja poolt määratud ajaperioodid
-puhkus_aeg = ttk.Entry(frame)
-
-õpi_aeg.grid(row=0, column=1)
-puhkus_aeg.grid(row=1, column=1)
 
 
 #Kui aeg parajasti ei jookse, siis vajutades nuppu start jooksutatakse kas õppimise_aja_määramine() või puhkamise_aja_määramine() (kordamööda)
 def õppimise_aja_määramine():
-    a, b = õpi_aeg.get().split(":")
-    aeg.set(f"{a}:{b}")
+    a, b, c = õppimine.split(":")
+    aeg.set(f"{a}:{b}:{c}")
 
 def puhkamise_aja_määramine():
-    a, b = puhkus_aeg.get().split(":")
-    aeg.set(f"{a}:{b}")
+    a, b, c = puhkamine.split(":")
+    aeg.set(f"{a}:{b}:{c}")
 
 # muutus_ajas funktsioon kutusb iseennast esile, kuni taimer jookseb 00:00-ni. Kui kasutaja vajutab paus, siis 
 def muutus_ajas():
