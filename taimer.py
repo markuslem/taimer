@@ -3,7 +3,6 @@ from tkinter import ttk
 import tkinter as tk
 from tkcalendar import *
 from datetime import datetime
-import PySimpleGUI as sg
 
 def keritav(start_hour=None, start_minute=None, start_second=None):
     def on_wheel(event, element):
@@ -57,6 +56,41 @@ def keritav(start_hour=None, start_minute=None, start_second=None):
 
     ok_button = Button(window, text="OK", command=on_ok)
     ok_button.grid(row=1, columnspan=5)
+
+    #õppeainete salvestamine
+
+
+    
+    def värskenda_õppeaineid():
+        
+        with open("ained.txt", encoding="utf8") as f:
+            faili_sisu = f.read()
+            faili_sisu = faili_sisu.splitlines()
+            global faili_pikkus
+            faili_pikkus = len(faili_sisu)
+            for i, aine in enumerate(faili_sisu):
+                aine_label = Label(window, text=aine, font=("Courier New", 12))
+                aine_label.grid(row=2+i, columnspan=5)
+        
+        global õppeaine_input, lisa_button
+        õppeaine_input = tk.Entry(window)
+        print(õppeaine_input)
+        õppeaine_input.grid(row=3+faili_pikkus, column=0)
+
+        lisa_button = Button(window, text="Lisa", command=lisa_faili)
+        lisa_button.grid(row=3+faili_pikkus, column=1)
+    
+    def lisa_faili(): # eemaldatakse entry ja button widgetid ja lisatakse input faili.
+        global õppeaine_input, lisa_button
+        rida = õppeaine_input.get()
+        õppeaine_input.destroy(); lisa_button.destroy()
+        with open("ained.txt", "a" ,encoding="utf8") as f:
+            print(rida)
+            f.write("\n"+rida)
+        värskenda_õppeaineid()
+    värskenda_õppeaineid()
+
+    
 
     window.mainloop()
     
