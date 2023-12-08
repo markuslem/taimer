@@ -5,6 +5,7 @@ from tkcalendar import *
 from datetime import datetime
 
 def keritav(start_hour=None, start_minute=None, start_second=None):
+    #numbrite kerimine
     def on_wheel(event, element):
         nonlocal tund, minut, sekund
         delta = -int(event.delta / 120)
@@ -46,9 +47,11 @@ def keritav(start_hour=None, start_minute=None, start_second=None):
         window.destroy()
     tund, minut, sekund = 0, 0, 0 
     tund1, minut1, sekund1 = 0, 0, 0
+
+    #avab akna
     window = Tk()
     frame = ttk.Frame(window, padding=10)
-    frame.pack()
+    frame.place()
 
     window.geometry("800x600")
     
@@ -65,20 +68,20 @@ def keritav(start_hour=None, start_minute=None, start_second=None):
     minut_label = Label(window, font=("Courier New", 48, "bold"))
     sekund_label = Label(window, font=("Courier New", 48, "bold"))
 
-    tund_label.place(relx=.3, rely=.3, anchor="center")
+    tund_label.place(relx=.1, rely=.3, anchor="center")
+    Label(window, text=":", font=("Courier New", 48, "bold")).place(relx=.2, rely=.3, anchor="center")
+    minut_label.place(relx=.3, rely=.3, anchor="center")
     Label(window, text=":", font=("Courier New", 48, "bold")).place(relx=.4, rely=.3, anchor="center")
-    minut_label.place(relx=.5, rely=.3, anchor="center")
-    Label(window, text=":", font=("Courier New", 48, "bold")).place(relx=.6, rely=.3, anchor="center")
-    sekund_label.place(relx=.7, rely=.3, anchor="center")
+    sekund_label.place(relx=.5, rely=.3, anchor="center")
     
-    Label(window, text="Õppimise aeg", font=("Courier New", 20, "bold")).place(relx=.5, rely=.2, anchor="center")
-    Label(window, text="Puhkamise aeg", font=("Courier New", 20, "bold")).place(relx=.5, rely=.4, anchor="center")
+    Label(window, text="Õppimise aeg", font=("Courier New", 20, "bold")).place(relx=.3, rely=.2, anchor="center")
+    Label(window, text="Puhkamise aeg", font=("Courier New", 20, "bold")).place(relx=.3, rely=.4, anchor="center")
     
-    tund1_label.place(relx=.3, rely=.5, anchor="center")
+    tund1_label.place(relx=.1, rely=.5, anchor="center")
+    Label(window, text=":", font=("Courier New", 48, "bold")).place(relx=.2, rely=.5, anchor="center")
+    minut1_label.place(relx=.3, rely=.5, anchor="center")
     Label(window, text=":", font=("Courier New", 48, "bold")).place(relx=.4, rely=.5, anchor="center")
-    minut1_label.place(relx=.5, rely=.5, anchor="center")
-    Label(window, text=":", font=("Courier New", 48, "bold")).place(relx=.6, rely=.5, anchor="center")
-    sekund1_label.place(relx=.7, rely=.5, anchor="center")
+    sekund1_label.place(relx=.5, rely=.5, anchor="center")
     
     tund_label.config(text=f"{tund:0>2d}")
     minut_label.config(text=f"{minut:0>2d}")
@@ -100,47 +103,48 @@ def keritav(start_hour=None, start_minute=None, start_second=None):
     ok_button = ttk.Button(window, text="OK", command=on_ok)
     ok_button.place(relx=.5, rely=.7, anchor="center")
 
-    #õppeainete salvestamine
-'''
 
-    
+
+    #õppeainete lisamisel nimekirja värskendatakse, laadimisel loetakse fail
     def värskenda_õppeaineid():
-        
         with open("ained.txt", encoding="utf8") as f:
             faili_sisu = f.read()
             faili_sisu = faili_sisu.splitlines()
             global faili_pikkus
             faili_pikkus = len(faili_sisu)
             for i, aine in enumerate(faili_sisu):
-                aine_label = Label(window, text=aine, font=("Courier New", 12))
-                aine_label.grid(row=5+i, columnspan=5)
-        
-        global õppeaine_input, lisa_button
-        õppeaine_input = tk.Entry(window)
-        print(õppeaine_input)
-        õppeaine_input.grid(row=3+faili_pikkus, column=0)
+                Label(window, text=aine, font=("Courier New", 12)).place(relx=0.77, rely=0.2 + 0.035 * i, anchor="center")
 
-        lisa_button = Button(window, text="Lisa", command=lisa_faili)
-        lisa_button.grid(row=3+faili_pikkus, column=1)
-    
-    def lisa_faili(): # eemaldatakse entry ja button widgetid ja lisatakse input faili.
+        global õppeaine_input, lisa_button
+        õppeaine_input = ttk.Entry(window, font=("Courier New", 12, "bold"))
+        õppeaine_input.place(relx=0.77, rely=0.2 + 0.035 * (i + 1), anchor="center")
+
+        lisa_button = ttk.Button(window, text="Lisa", command=lisa_faili)
+        lisa_button.place(relx=0.77, rely=0.2 + 0.037 * (i + 2), anchor="center")
+
+    def lisa_faili():
         global õppeaine_input, lisa_button
         rida = õppeaine_input.get()
-        õppeaine_input.destroy(); lisa_button.destroy()
-        with open("ained.txt", "a" ,encoding="utf8") as f:
-            print(rida)
-            f.write("\n"+rida)
+        õppeaine_input.destroy()
+        lisa_button.destroy()
+        if rida.strip() != "":
+            with open("ained.txt", "a", encoding="utf8") as f:
+                f.write("\n"+rida)
         värskenda_õppeaineid()
+
     värskenda_õppeaineid()
-
+    window.mainloop()
+    window.mainloop()
     
-'''
 
-    
+
     
 
 keritav()
+
 õppimine = valik_aeg
 puhkamine = valik_aeg1
+
 print(õppimine)
 print(puhkamine)
+
