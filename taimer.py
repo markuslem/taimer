@@ -15,47 +15,90 @@ def keritav(start_hour=None, start_minute=None, start_second=None):
         elif element == "Sekund":
             sekund = (sekund + delta) % 60
         update_time()
+    def on_wheel1(event, element):
+        nonlocal tund1, minut1, sekund1
+        delta = -int(event.delta / 120)
+        if element == "Tund1":
+            tund1 = (tund1 + delta) % 24
+        elif element == "Minut1":
+            minut1 = (minut1 + delta) % 60
+        elif element == "Sekund1":
+            sekund1 = (sekund1 + delta) % 60
+        update_time1()
 
     def update_time():
         nonlocal tund, minut, sekund
         tund_label.config(text=f"{tund:0>2d}")
         minut_label.config(text=f"{minut:0>2d}")
         sekund_label.config(text=f"{sekund:0>2d}")
+    def update_time1():
+        nonlocal tund, minut, sekund
+        tund1_label.config(text=f"{tund1:0>2d}")
+        minut1_label.config(text=f"{minut1:0>2d}")
+        sekund1_label.config(text=f"{sekund1:0>2d}")
 
     def on_ok():
         global valik_aeg
+        global valik_aeg1
         nonlocal tund, minut, sekund
         valik_aeg = f"{tund:0>2d}:{minut:0>2d}:{sekund:0>2d}"
+        valik_aeg1 = f"{tund1:0>2d}:{minut1:0>2d}:{sekund1:0>2d}"
         window.destroy()
-
+    tund, minut, sekund = 0, 0, 0 
+    tund1, minut1, sekund1 = 0, 0, 0
     window = Tk()
-    window.title("Vali aeg")
+    frame = ttk.Frame(window, padding=10)
+    frame.pack()
 
-    tund, minut, sekund = 0, 0, 0
+    window.geometry("800x600")
+    
     tund = tund if start_hour is None else max(0, min(int(start_hour), 23))
     minut = minut if start_minute is None else max(0, min(int(start_minute), 59))
     sekund = sekund if start_second is None else max(0, min(int(start_second), 59))
+   
+    
+    tund1_label = Label(window, font=("Courier New", 48, "bold"))
+    minut1_label = Label(window, font=("Courier New", 48, "bold"))
+    sekund1_label = Label(window, font=("Courier New", 48, "bold"))
 
     tund_label = Label(window, font=("Courier New", 48, "bold"))
     minut_label = Label(window, font=("Courier New", 48, "bold"))
     sekund_label = Label(window, font=("Courier New", 48, "bold"))
 
-    tund_label.grid(row=0, column=0)
-    Label(window, text=":", font=("Courier New", 48, "bold")).grid(row=0, column=1)
-    minut_label.grid(row=0, column=2)
-    Label(window, text=":", font=("Courier New", 48, "bold")).grid(row=0, column=3)
-    sekund_label.grid(row=0, column=4)
-
+    tund_label.place(relx=.3, rely=.3, anchor="center")
+    Label(window, text=":", font=("Courier New", 48, "bold")).place(relx=.4, rely=.3, anchor="center")
+    minut_label.place(relx=.5, rely=.3, anchor="center")
+    Label(window, text=":", font=("Courier New", 48, "bold")).place(relx=.6, rely=.3, anchor="center")
+    sekund_label.place(relx=.7, rely=.3, anchor="center")
+    
+    Label(window, text="Õppimise aeg", font=("Courier New", 20, "bold")).place(relx=.5, rely=.2, anchor="center")
+    Label(window, text="Puhkamise aeg", font=("Courier New", 20, "bold")).place(relx=.5, rely=.4, anchor="center")
+    
+    tund1_label.place(relx=.3, rely=.5, anchor="center")
+    Label(window, text=":", font=("Courier New", 48, "bold")).place(relx=.4, rely=.5, anchor="center")
+    minut1_label.place(relx=.5, rely=.5, anchor="center")
+    Label(window, text=":", font=("Courier New", 48, "bold")).place(relx=.6, rely=.5, anchor="center")
+    sekund1_label.place(relx=.7, rely=.5, anchor="center")
+    
     tund_label.config(text=f"{tund:0>2d}")
     minut_label.config(text=f"{minut:0>2d}")
     sekund_label.config(text=f"{sekund:0>2d}")
+    
+    tund1_label.config(text=f"{tund1:0>2d}")
+    minut1_label.config(text=f"{minut1:0>2d}")
+    sekund1_label.config(text=f"{sekund1:0>2d}")
+    
+    tund1_label.bind("<MouseWheel>", lambda event: on_wheel1(event, "Tund1"))
+    minut1_label.bind("<MouseWheel>", lambda event: on_wheel1(event, "Minut1"))
+    sekund1_label.bind("<MouseWheel>", lambda event: on_wheel1(event, "Sekund1"))
 
     tund_label.bind("<MouseWheel>", lambda event: on_wheel(event, "Tund"))
     minut_label.bind("<MouseWheel>", lambda event: on_wheel(event, "Minut"))
     sekund_label.bind("<MouseWheel>", lambda event: on_wheel(event, "Sekund"))
+    
 
-    ok_button = Button(window, text="OK", command=on_ok)
-    ok_button.grid(row=1, columnspan=5)
+    ok_button = ttk.Button(window, text="OK", command=on_ok)
+    ok_button.place(relx=.5, rely=.7, anchor="center")
 
     #õppeainete salvestamine
 
@@ -93,13 +136,13 @@ def keritav(start_hour=None, start_minute=None, start_second=None):
     
 
     window.mainloop()
+
     
     
 
 keritav()
 õppimine = valik_aeg
-keritav()
-puhkamine = valik_aeg
+puhkamine = valik_aeg1
 print(õppimine)
 print(puhkamine)
 
