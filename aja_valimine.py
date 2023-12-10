@@ -110,10 +110,12 @@ def keritav(start_hour=None, start_minute=None, start_second=None):
         with open("ained.txt", encoding="utf8") as f:
             faili_sisu = f.read()
             faili_sisu = faili_sisu.splitlines()
-            global faili_pikkus
-            faili_pikkus = len(faili_sisu)
+            
+            õppeained = []
             for i, aine in enumerate(faili_sisu):
-                Label(window, text=aine, font=("Courier New", 12)).place(relx=0.77, rely=0.2 + 0.035 * i, anchor="center")
+                label = Label(window, text=aine, font=("Courier New", 12))
+                label.bind("<Button-1>", remove_label)
+                label.place(relx=0.77, rely=0.2 + 0.035 * i, anchor="center")
 
         global õppeaine_input, lisa_button
         õppeaine_input = ttk.Entry(window, font=("Courier New", 12, "bold"))
@@ -131,6 +133,9 @@ def keritav(start_hour=None, start_minute=None, start_second=None):
             with open("ained.txt", "a", encoding="utf8") as f:
                 f.write("\n"+rida)
         värskenda_õppeaineid()
+    
+    def remove_label(event):
+        event.widget.destroy()
 
     värskenda_õppeaineid()
     window.mainloop()
@@ -145,6 +150,4 @@ keritav()
 õppimine = valik_aeg
 puhkamine = valik_aeg1
 
-print(õppimine)
-print(puhkamine)
 
