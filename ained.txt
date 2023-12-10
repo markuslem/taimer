@@ -1,7 +1,6 @@
-Kõrgem matemaatika
-Programmeerimine
-Arvuti arhitektuur ja riistvara
-abd
-   s    
-sdasdsdasd
-fdsaffefsf
+muusika
+ajalugu
+vene keel
+programmeerimine
+ajalugu \n
+keemia

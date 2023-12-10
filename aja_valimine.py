@@ -4,6 +4,9 @@ import tkinter as tk
 from tkcalendar import *
 from datetime import datetime
 
+
+õppeained = []
+
 def keritav(start_hour=None, start_minute=None, start_second=None):
     #numbrite kerimine
     def on_wheel(event, element):
@@ -107,35 +110,68 @@ def keritav(start_hour=None, start_minute=None, start_second=None):
 
     #õppeainete lisamisel nimekirja värskendatakse, laadimisel loetakse fail
     def värskenda_õppeaineid():
+        global õppeained
         with open("ained.txt", encoding="utf8") as f:
             faili_sisu = f.read()
+            if faili_sisu.strip() == "":
+                lisamise_nupud()
+                return "Fail on tühi"
             faili_sisu = faili_sisu.splitlines()
+
+            for õppeaine in õppeained:
+                õppeaine.destroy()
             
             õppeained = []
             for i, aine in enumerate(faili_sisu):
                 label = Label(window, text=aine, font=("Courier New", 12))
-                label.bind("<Button-1>", remove_label)
+                õppeained.append(label)
+                label.bind("<Button-1>", lambda event, label_to_remove=label: remove_label(event, label_to_remove)) # teksti peale klikkides
                 label.place(relx=0.77, rely=0.2 + 0.035 * i, anchor="center")
+        lisamise_nupud(i=i)
+        
+    def lisamise_nupud(i=0):
 
         global õppeaine_input, lisa_button
+        # variable 'i' on faili pikkus
         õppeaine_input = ttk.Entry(window, font=("Courier New", 12, "bold"))
         õppeaine_input.place(relx=0.77, rely=0.2 + 0.035 * (i + 1), anchor="center")
 
-        lisa_button = ttk.Button(window, text="Lisa", command=lisa_faili)
+        lisa_button = ttk.Button(window, text="Lisa", command=uuenda_faili)
         lisa_button.place(relx=0.77, rely=0.2 + 0.037 * (i + 2), anchor="center")
-
-    def lisa_faili():
+    
+    def eemalda_väli():
         global õppeaine_input, lisa_button
-        rida = õppeaine_input.get()
+        rida = õppeaine_input.get() # variable rida kasutatakse uuenda_faili() funktsioonis
+
         õppeaine_input.destroy()
         lisa_button.destroy()
+        # võiks labelid ka eemaldada NB!!!!!
+
+        return rida
+
+    def uuenda_faili():
+        
+        rida = eemalda_väli()
+        
+        
         if rida.strip() != "":
             with open("ained.txt", "a", encoding="utf8") as f:
-                f.write("\n"+rida)
+                f.write("\n"+rida.strip())
         värskenda_õppeaineid()
     
-    def remove_label(event):
-        event.widget.destroy()
+    def remove_label(event, aine):
+        aine_text = aine.cget("text")
+        with open("ained.txt", "r", encoding="UTF-8") as f:
+            read = f.readlines()
+        with open("ained.txt", "w", encoding="UTF-8") as f:
+            for rida in read:
+                print(rida.strip(), aine_text.strip())
+                if rida.strip() != aine_text.strip():
+                    f.write(rida)
+                    print(rida)
+
+        uuenda_faili()
+        
 
     värskenda_õppeaineid()
     window.mainloop()
