@@ -1,6 +1,8 @@
 muusika
 ajalugu
-vene keel
 programmeerimine
-ajalugu \n
 keemia
+saksa keel
+prantsuse keel
+bioloogia\n
+füüsika

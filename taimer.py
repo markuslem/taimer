@@ -3,6 +3,9 @@ from tkinter import ttk
 import tkinter as tk
 from tkcalendar import *
 from datetime import datetime
+import pandas as pd
+
+#aja_valimine.py
 from aja_valimine import õppimine, puhkamine
 
 window = Tk()
@@ -101,6 +104,23 @@ def taimer_mustaks():
     if aeg_jookseb == False:
         frame.after(500, taimer_punaseks)
 
+def uuenda_statistikat():
+    df = pd.read_csv("kulutatud_aeg.csv")
+    df.loc[df['õppeaine'] == 'kokku', 'aeg'] += 1 # kokku aja uuendamine
+    
+    # vastava õppeaine aja uuendamine
+    valitu = valitud_aine.get()
+    if df['õppeaine'].isin([valitu]).any():
+        df.loc[df['õppeaine'] == valitu, 'aeg'] += 1
+    #juhul kui õppeainet ei ole kulutatud_aeg.csv failis
+    else:
+        andmed = [{'õppeaine': valitu, 'aeg': 1}]
+        uus_rida = pd.DataFrame(andmed)
+        df = df._append(uus_rida, ignore_index=True)
+    
+    df.to_csv("kulutatud_aeg.csv", index=False, columns=['õppeaine', 'aeg'])
+    
+
 
 paus = True
 töötamine = True #töötamine = True, kui käsil on õppimissessioon, töötamine = False, kui käsil on puhkepaus
@@ -122,6 +142,6 @@ with open('ained.txt', encoding='UTF-8') as f:
 
     nimekiri = OptionMenu(window, valitud_aine, *sisu)
     nimekiri.place(relx=0.5, rely=0.75)
-
+uuenda_statistikat()
 
 window.mainloop()
