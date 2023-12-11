@@ -113,5 +113,15 @@ start_nupp.place(in_=taimer, relx=0.1, x=0, rely=1.0)
 paus_nupp = ttk.Button(window, text="Paus", command=paus_func)
 paus_nupp.place(in_=taimer, rely=1.0, relx=0.55)
 
+with open('ained.txt', encoding='UTF-8') as f:
+    sisu = f.readlines()
+    sisu = [x.strip() for x in sisu]
+
+    valitud_aine = StringVar()
+    valitud_aine.set(sisu[0])
+
+    nimekiri = OptionMenu(window, valitud_aine, *sisu)
+    nimekiri.place(relx=0.5, rely=0.75)
+
 
 window.mainloop()
