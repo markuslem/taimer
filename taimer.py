@@ -31,7 +31,7 @@ def puhkamise_aja_määramine():
 
 # muutus_ajas funktsioon kutusb iseennast esile, kuni taimer jookseb 00:00-ni. Kui kasutaja vajutab paus, siis 
 def muutus_ajas():
-    global paus, töötamine, aeg_jookseb
+    global paus, töötamine, aeg_jookseb, sessiooni_aeg
     if paus == False:
         ühikud = list(map(int, aeg.get().split(":")))
         sekundid = sum((x*(60**i) for i, x in enumerate(reversed(ühikud))))
@@ -41,6 +41,7 @@ def muutus_ajas():
 
         if sekundid > 0:
             sekundid -= 1
+            if töötamine == True: sessiooni_aeg += 1 #käib õppimise sessioon, mitte puhkus
             tunnid = sekundid // 3600
             minutid = sekundid // 60
             sekundid = sekundid % 60
@@ -57,8 +58,10 @@ def muutus_ajas():
                 aeg.set(f"{tunnid}:{minutid}:{sekundid}")
             
             if sekundid == "00" and minutid == "00" and tunnid == "00":
-                taimer_punaseks()
                 aeg_jookseb = False
+                taimer_punaseks()
+                uuenda_statistikat(sessiooni_aeg)
+                sessiooni_aeg = 0
                 if töötamine == False:
                     töötamine = True
                 else:
@@ -70,8 +73,10 @@ def muutus_ajas():
         frame.after(10, muutus_ajas)
 
 def paus_func():
-    global paus
+    global paus, sessiooni_aeg
     paus = True
+    uuenda_statistikat(sessiooni_aeg)
+    sessiooni_aeg = 0
 
 def start():
     print("Start")
@@ -104,17 +109,17 @@ def taimer_mustaks():
     if aeg_jookseb == False:
         frame.after(500, taimer_punaseks)
 
-def uuenda_statistikat():
+def uuenda_statistikat(sessiooni_aeg):
     df = pd.read_csv("kulutatud_aeg.csv")
-    df.loc[df['õppeaine'] == 'kokku', 'aeg'] += 1 # kokku aja uuendamine
+    df.loc[df['õppeaine'] == 'kokku', 'aeg'] += sessiooni_aeg # kokku aja uuendamine
     
     # vastava õppeaine aja uuendamine
     valitu = valitud_aine.get()
     if df['õppeaine'].isin([valitu]).any():
-        df.loc[df['õppeaine'] == valitu, 'aeg'] += 1
+        df.loc[df['õppeaine'] == valitu, 'aeg'] += sessiooni_aeg
     #juhul kui õppeainet ei ole kulutatud_aeg.csv failis
     else:
-        andmed = [{'õppeaine': valitu, 'aeg': 1}]
+        andmed = [{'õppeaine': valitu, 'aeg': sessiooni_aeg}]
         uus_rida = pd.DataFrame(andmed)
         df = df._append(uus_rida, ignore_index=True)
     
@@ -126,6 +131,7 @@ paus = True
 töötamine = True #töötamine = True, kui käsil on õppimissessioon, töötamine = False, kui käsil on puhkepaus
 aeg_jookseb = False #selleks, et start nuppu mitu korda vajutades ei panda aega alusest peale käima
 
+sessiooni_aeg = 0
 
 start_nupp = ttk.Button(window, text="Start", command=start)
 start_nupp.place(in_=taimer, relx=0.1, x=0, rely=1.0)
@@ -142,6 +148,7 @@ with open('ained.txt', encoding='UTF-8') as f:
 
     nimekiri = OptionMenu(window, valitud_aine, *sisu)
     nimekiri.place(relx=0.5, rely=0.75)
-uuenda_statistikat()
+
 
 window.mainloop()
+uuenda_statistikat(sessiooni_aeg) #kui programm pannakse ilma pausimata kinni
