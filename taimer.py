@@ -14,6 +14,16 @@ frame.pack()
 frame.place()
 window.geometry("800x600")
 
+#sakkide lisamine lehele
+tabControl = ttk.Notebook(window)
+
+tab1 = ttk.Frame(tabControl) 
+tab2 = ttk.Frame(tabControl)
+
+tabControl.add(tab1, text ='Taimer') 
+tabControl.add(tab2, text ='Statistika') 
+tabControl.pack(expand = 1, fill ="both") 
+
 aeg = StringVar()
 aeg.set(õppimine)
 taimer = tk.Label(window, textvariable=aeg, font=("consolas", 60))
