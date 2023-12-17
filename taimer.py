@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import tkinter as tk
 from tkcalendar import *
-from datetime import datetime
+import datetime
 import pandas as pd
 
 #aja_valimine.py
@@ -174,10 +174,14 @@ with open('kulutatud_aeg.csv', encoding='UTF-8') as f:
     tree.heading("# 2", text="Õpitud aeg")
 
 
-    for õppeaine, aeg in sisu:
+    for õppeaine, aeg in sisu[1:]:
+        aeg = int(float(aeg))
+        aeg = str(datetime.timedelta(seconds=aeg))
+
+        #aeg = f"{tunnid}:{minutid}:{sekundid}"
+        
         print(õppeaine)
         tree.insert('', 'end', values=(õppeaine, aeg))
-        
 
     tree.pack()
 
