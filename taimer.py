@@ -26,7 +26,7 @@ tabControl.pack(expand = 1, fill ="both")
 
 aeg = StringVar()
 aeg.set(õppimine)
-taimer = tk.Label(window, textvariable=aeg, font=("consolas", 60))
+taimer = tk.Label(tab1, textvariable=aeg, font=("consolas", 60))
 taimer.place(relx=.5, rely=.5, anchor="center")
 
 
@@ -143,10 +143,10 @@ aeg_jookseb = False #selleks, et start nuppu mitu korda vajutades ei panda aega 
 
 sessiooni_aeg = 0
 
-start_nupp = ttk.Button(window, text="Start", command=start)
+start_nupp = ttk.Button(tab1, text="Start", command=start)
 start_nupp.place(in_=taimer, relx=0.1, x=0, rely=1.0)
 
-paus_nupp = ttk.Button(window, text="Paus", command=paus_func)
+paus_nupp = ttk.Button(tab1, text="Paus", command=paus_func)
 paus_nupp.place(in_=taimer, rely=1.0, relx=0.55)
 
 with open('ained.txt', encoding='UTF-8') as f:
@@ -156,7 +156,7 @@ with open('ained.txt', encoding='UTF-8') as f:
     valitud_aine = StringVar()
     valitud_aine.set(sisu[0])
 
-    nimekiri = OptionMenu(window, valitud_aine, *sisu)
+    nimekiri = OptionMenu(tab1, valitud_aine, *sisu)
     nimekiri.place(relx=0.5, rely=0.75)
 
 
