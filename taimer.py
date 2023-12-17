@@ -160,5 +160,26 @@ with open('ained.txt', encoding='UTF-8') as f:
     nimekiri.place(relx=0.5, rely=0.75)
 
 
+
+
+#statistika leht
+ttk.Label(tab2, text="Statistika", font=("consolas", 60)).pack()
+with open('kulutatud_aeg.csv', encoding='UTF-8') as f:
+    sisu = [x.strip().split(",") for x in f.readlines()]
+    
+    tree = ttk.Treeview(tab2, column=("c1", "c2"), show='headings', height=len(sisu))
+    tree.column("# 1", anchor=CENTER)
+    tree.heading("# 1", text="Õppeaine")
+    tree.column("# 2", anchor=CENTER)
+    tree.heading("# 2", text="Õpitud aeg")
+
+
+    for õppeaine, aeg in sisu:
+        print(õppeaine)
+        tree.insert('', 'end', values=(õppeaine, aeg))
+        
+
+    tree.pack()
+
 window.mainloop()
 uuenda_statistikat(sessiooni_aeg) #kui programm pannakse ilma pausimata kinni
