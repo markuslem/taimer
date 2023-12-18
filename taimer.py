@@ -134,6 +134,9 @@ def uuenda_statistikat(sessiooni_aeg):
         df = df._append(uus_rida, ignore_index=True)
     
     df.to_csv("kulutatud_aeg.csv", index=False, columns=['õppeaine', 'aeg'])
+
+    eemalda_statistika_lehekülg()
+    uuenda_statistika_lehekülge()
     
 
 
@@ -159,31 +162,38 @@ with open('ained.txt', encoding='UTF-8') as f:
     nimekiri = OptionMenu(tab1, valitud_aine, *sisu)
     nimekiri.place(relx=0.5, rely=0.75)
 
+def eemalda_statistika_lehekülg():
+    global statistika_pealkiri, tree
+    statistika_pealkiri.destroy()
+    tree.destroy()
 
 
-
-#statistika leht
-ttk.Label(tab2, text="Statistika", font=("consolas", 60)).pack()
-with open('kulutatud_aeg.csv', encoding='UTF-8') as f:
-    sisu = [x.strip().split(",") for x in f.readlines()]
-    
-    tree = ttk.Treeview(tab2, column=("c1", "c2"), show='headings', height=len(sisu))
-    tree.column("# 1", anchor=CENTER)
-    tree.heading("# 1", text="Õppeaine")
-    tree.column("# 2", anchor=CENTER)
-    tree.heading("# 2", text="Õpitud aeg")
-
-
-    for õppeaine, kulunud_aeg in sisu[1:]:
-        kulunud_aeg = int(float(kulunud_aeg))
-
-        kulunud_aeg = str(datetime.timedelta(seconds=kulunud_aeg))
-
+def uuenda_statistika_lehekülge():
+    #statistika leht
+    global statistika_pealkiri, tree
+    statistika_pealkiri = ttk.Label(tab2, text="Statistika", font=("consolas", 60))
+    statistika_pealkiri.pack()
+    with open('kulutatud_aeg.csv', encoding='UTF-8') as f:
+        sisu = [x.strip().split(",") for x in f.readlines()]
         
-        print(õppeaine)
-        tree.insert('', 'end', values=(õppeaine, kulunud_aeg))
+        tree = ttk.Treeview(tab2, column=("c1", "c2"), show='headings', height=len(sisu))
+        tree.column("# 1", anchor=CENTER)
+        tree.heading("# 1", text="Õppeaine")
+        tree.column("# 2", anchor=CENTER)
+        tree.heading("# 2", text="Õpitud aeg")
 
-    tree.pack()
+
+        for õppeaine, kulunud_aeg in sisu[1:]:
+            kulunud_aeg = int(float(kulunud_aeg))
+
+            kulunud_aeg = str(datetime.timedelta(seconds=kulunud_aeg))
+
+            
+            print(õppeaine)
+            tree.insert('', 'end', values=(õppeaine, kulunud_aeg))
+
+        tree.pack()
+uuenda_statistika_lehekülge()
 
 window.mainloop()
 uuenda_statistikat(sessiooni_aeg) #kui programm pannakse ilma pausimata kinni
