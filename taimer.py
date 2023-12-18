@@ -174,14 +174,14 @@ with open('kulutatud_aeg.csv', encoding='UTF-8') as f:
     tree.heading("# 2", text="Õpitud aeg")
 
 
-    for õppeaine, aeg in sisu[1:]:
-        aeg = int(float(aeg))
-        aeg = str(datetime.timedelta(seconds=aeg))
+    for õppeaine, kulunud_aeg in sisu[1:]:
+        kulunud_aeg = int(float(kulunud_aeg))
 
-        #aeg = f"{tunnid}:{minutid}:{sekundid}"
+        kulunud_aeg = str(datetime.timedelta(seconds=kulunud_aeg))
+
         
         print(õppeaine)
-        tree.insert('', 'end', values=(õppeaine, aeg))
+        tree.insert('', 'end', values=(õppeaine, kulunud_aeg))
 
     tree.pack()
 

@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import tkinter as tk
 from tkcalendar import *
+import pandas as pd
 from datetime import datetime
 
 
@@ -145,7 +146,6 @@ def keritav(start_hour=None, start_minute=None, start_second=None):
 
         õppeaine_input.destroy()
         lisa_button.destroy()
-        # võiks labelid ka eemaldada NB!!!!!
 
         return rida
 
@@ -169,8 +169,22 @@ def keritav(start_hour=None, start_minute=None, start_second=None):
                 if rida.strip() != aine_text.strip():
                     f.write(rida)
                     print(rida)
+    
+        #kui õppeaine eemaldatakse, lisatakse see kategooriasse muu
+        df = pd.read_csv("kulutatud_aeg.csv")
+        eemaldatav_rida = df[df['õppeaine'] == aine_text]
+        if not eemaldatav_rida.empty:
 
+            df.loc[df['õppeaine'] == "muu", 'aeg'] += eemaldatav_rida['aeg'].values[0]
+
+            #rea eemaldamine
+            df = df[df['õppeaine'] != aine_text]
+
+            df.to_csv("kulutatud_aeg.csv", index=False)
+        
         uuenda_faili()
+    
+
         
 
     värskenda_õppeaineid()
