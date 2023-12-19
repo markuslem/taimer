@@ -12,7 +12,7 @@ window = Tk()
 frame = ttk.Frame(window, padding=10)
 frame.pack()
 frame.place()
-window.geometry("800x600")
+window.geometry("1920x1800")
 
 #sakkide lisamine lehele
 tabControl = ttk.Notebook(window)
@@ -154,11 +154,12 @@ aeg_jookseb = False #selleks, et start nuppu mitu korda vajutades ei panda aega 
 sessiooni_aeg = 0
 
 start_nupp = ttk.Button(tab1, text="Start", command=start)
-start_nupp.place(in_=taimer, relx=0.1, x=0, rely=1.0)
+start_nupp.place(in_=taimer, relx=0.7, x=0, rely=1.2, anchor='center')
 
 paus_nupp = ttk.Button(tab1, text="Paus", command=paus_func)
-paus_nupp.place(in_=taimer, rely=1.0, relx=0.55)
-
+paus_nupp.place(in_=taimer, rely=1.2, relx=0.3, anchor='center')
+nimekiri_nupp = ttk.Style()
+nimekiri_nupp.configure('My.TButton', foreground='black', background='lightblue', font=('Arial', 12))
 with open('ained.txt', encoding='UTF-8') as f:
     sisu = f.readlines()
     sisu = [x.strip() for x in sisu]
@@ -166,7 +167,7 @@ with open('ained.txt', encoding='UTF-8') as f:
     valitud_aine_var = StringVar()
     valitud_aine_var.set(sisu[0])
 
-    nimekiri = OptionMenu(tab1, valitud_aine_var, *sisu)
+    nimekiri = ttk.OptionMenu(tab1, valitud_aine_var, *sisu)
     nimekiri.place(relx=0.5, rely=0.75, anchor='center')
 
 def eemalda_statistika_lehekülg():
@@ -204,11 +205,11 @@ def uuenda_statistika_lehekülge():
     #pie chart
     
     canvas = Canvas(tab2,width=500,height=500)
-    canvas.place(x=200, y=200)
+    canvas.place(x=800, y=400)
 
     def createPieChart(PieV,värvid):
         st = 0
-        coord = 100, 100, 300, 300
+        coord = 0, 0, 300, 300
         total = sum(PieV)
         for val,col in zip(PieV,värvid):  
             extent = (val / total) * 360   
