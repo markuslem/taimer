@@ -29,7 +29,7 @@ aeg.set(õppimine)
 taimer = tk.Label(tab1, textvariable=aeg, font=("consolas", 60))
 taimer.place(relx=.5, rely=.5, anchor="center")
 
-värvid=["Red","Blue","Yellow","Green", "Orage", "Violet", "Black", "Aqua", "Grey", "Orange"]
+värvid = ["Red", "Blue", "Green", "Orange", "Purple", "Cyan", "Magenta", "Brown", "Pink", "Grey"]
 
 
 #Kui aeg parajasti ei jookse, siis vajutades nuppu start jooksutatakse kas õppimise_aja_määramine() või puhkamise_aja_määramine() (kordamööda)
@@ -178,7 +178,7 @@ def eemalda_statistika_lehekülg():
 
 def uuenda_statistika_lehekülge():
     #statistika tabel
-    global statistika_pealkiri, tree
+    global statistika_pealkiri, tree, värvid
     statistika_pealkiri = ttk.Label(tab2, text="Statistika", font=("consolas", 60))
     statistika_pealkiri.pack()
     with open('kulutatud_aeg.csv', encoding='UTF-8') as f:
@@ -190,15 +190,18 @@ def uuenda_statistika_lehekülge():
         tree.column("# 2", anchor=CENTER)
         tree.heading("# 2", text="Õpitud aeg")
 
-
-        for õppeaine, kulunud_aeg in sisu[1:]:
+        for index, (õppeaine, kulunud_aeg) in enumerate(sisu[1:]):
             kulunud_aeg = int(float(kulunud_aeg))
 
             kulunud_aeg = str(datetime.timedelta(seconds=kulunud_aeg))
 
             
             print(õppeaine)
-            tree.insert('', 'end', values=(õppeaine, kulunud_aeg))
+            item_id = tree.insert('', 'end', values=(õppeaine, kulunud_aeg))
+
+            if index != 0:
+                tree.tag_configure(f"row_{index}_color", foreground=värvid[index-1])  # Configure text color
+                tree.item(item_id, tags=(f"row_{index}_color",)) 
 
         tree.pack()
 
@@ -217,11 +220,9 @@ def uuenda_statistika_lehekülge():
             st += extent 
 
     PieV=[float(x[1]) for x in sisu[2:]]
-    global värvid
     
-    värvid=värvid[:len(PieV)]
-    print(PieV,värvid)
-    createPieChart(PieV,värvid)   
+    värvid_pikkusega=värvid[:len(PieV)]
+    createPieChart(PieV,värvid_pikkusega)   
 
 
 

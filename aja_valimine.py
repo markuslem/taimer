@@ -156,7 +156,8 @@ def keritav(start_hour=None, start_minute=None, start_second=None):
         
         if rida.strip() != "":
             with open("ained.txt", "a", encoding="utf8") as f:
-                f.write("\n"+rida.strip())
+
+                f.write(rida.strip() + "\n") #faili pikkus 
         värskenda_õppeaineid()
     
     def remove_label(event, aine):
@@ -166,9 +167,10 @@ def keritav(start_hour=None, start_minute=None, start_second=None):
         with open("ained.txt", "w", encoding="UTF-8") as f:
             for rida in read:
                 print(rida.strip(), aine_text.strip())
-                if rida.strip() != aine_text.strip():
-                    f.write(rida)
-                    print(rida)
+                if rida.strip() != aine_text.strip() and rida.strip() != "":
+                    f.write(rida.strip() + "\n")
+
+                    
     
         #kui õppeaine eemaldatakse, lisatakse see kategooriasse muu
         df = pd.read_csv("kulutatud_aeg.csv")
