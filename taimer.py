@@ -60,7 +60,6 @@ def muutus_ajas():
 
             #kui mõni null on puudu, lisatakse see sõne ette. Nt jäänud on 5 sekundit -> "05"
             tunnid, minutid, sekundid = tuple(str(x) if x >= 10 else "0"+str(x) for x in [tunnid, minutid, sekundid])
-            print(tunnid, minutid, sekundid)
 
 
             #kui tunnid on 0 siis kasutaja seda ei näe
@@ -92,11 +91,9 @@ def paus_func():
     sessiooni_aeg = 0
 
 def start():
-    print("Start")
     global paus, aeg_jookseb
     paus = False
     if aeg_jookseb == False:
-        print("Aeg läheb käima")
 
         #taimeri värv mustaks
         taimer.config(fg="#000000")
@@ -160,14 +157,16 @@ paus_nupp = ttk.Button(tab1, text="Paus", command=paus_func)
 paus_nupp.place(in_=taimer, rely=1.2, relx=0.3, anchor='center')
 nimekiri_nupp = ttk.Style()
 nimekiri_nupp.configure('My.TButton', foreground='black', background='lightblue', font=('Arial', 12))
+
 with open('ained.txt', encoding='UTF-8') as f:
     sisu = f.readlines()
     sisu = [x.strip() for x in sisu]
 
-    valitud_aine_var = StringVar()
+    valitud_aine_var = StringVar(tab1)
     valitud_aine_var.set(sisu[0])
 
-    nimekiri = ttk.OptionMenu(tab1, valitud_aine_var, *sisu)
+
+    nimekiri = ttk.OptionMenu(tab1, valitud_aine_var, sisu[0], *sisu)
     nimekiri.place(relx=0.5, rely=0.75, anchor='center')
 
 def eemalda_statistika_lehekülg():
@@ -196,7 +195,6 @@ def uuenda_statistika_lehekülge():
             kulunud_aeg = str(datetime.timedelta(seconds=kulunud_aeg))
 
             
-            print(õppeaine)
             item_id = tree.insert('', 'end', values=(õppeaine, kulunud_aeg))
 
             if index != 0:
@@ -227,18 +225,21 @@ def uuenda_statistika_lehekülge():
 
 
 def option_to_label():
-    global nimekiri, õpitav_aine_lbl, valitud_aine_var
+    global nimekiri, õpitav_aine_lbl, valitud_aine_var, õpitav_aine_text
     try:
         õpitav_aine_lbl.destroy()
     except:
         nimekiri.destroy()
     nimekiri.destroy()
-    õpitav_aine_lbl = ttk.Label(tab1, text=valitud_aine_var.get(), font=("consolas", 30))
+    õpitav_aine_text = valitud_aine_var.get()
+    õpitav_aine_lbl = ttk.Label(tab1, text=õpitav_aine_text, font=("consolas", 30))
     õpitav_aine_lbl.place(relx=0.5, rely=0.75, anchor='center')
 def label_to_option():
-    global nimekiri, õpitav_aine_lbl, valitud_aine_var
+    global nimekiri, õpitav_aine_lbl, valitud_aine_var, õpitav_aine_text
     õpitav_aine_lbl.destroy()
-    nimekiri = ttk.OptionMenu(tab1, valitud_aine_var, *sisu)
+    print(õpitav_aine_text)
+    valitud_aine_var.set(õpitav_aine_text)
+    nimekiri = ttk.OptionMenu(tab1, valitud_aine_var, õpitav_aine_text, *sisu)
     nimekiri.place(relx=0.5, rely=0.75, anchor='center')
 
 
