@@ -198,15 +198,16 @@ def uuenda_statistika_lehekülge():
             print(õppeaine)
             item_id = tree.insert('', 'end', values=(õppeaine, kulunud_aeg))
 
-            tree.tag_configure(f"row_{index}_color", foreground=värvid[index])  # Configure text color
-            tree.item(item_id, tags=(f"row_{index}_color",)) 
+            if index != 0:
+                tree.tag_configure(f"row_{index}_color", foreground=värvid[index-1])  # Configure text color
+                tree.item(item_id, tags=(f"row_{index}_color",)) 
 
         tree.pack()
 
     #pie chart
     
     canvas = Canvas(tab2,width=500,height=500)
-    canvas.place(x=200, y=200)
+    canvas.place(x=200, y=250)
 
     def createPieChart(PieV,colV):
         st = 0
