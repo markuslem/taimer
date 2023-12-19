@@ -165,7 +165,7 @@ with open('ained.txt', encoding='UTF-8') as f:
     valitud_aine_var.set(sisu[0])
 
     nimekiri = OptionMenu(tab1, valitud_aine_var, *sisu)
-    nimekiri.place(relx=0.5, rely=0.75)
+    nimekiri.place(relx=0.5, rely=0.75, anchor='center')
 
 def eemalda_statistika_lehekülg():
     global statistika_pealkiri, tree
@@ -222,15 +222,19 @@ def uuenda_statistika_lehekülge():
 
 
 def option_to_label():
-    global valitud_aine_var, õpitav_aine_lbl, nimekiri
+    global nimekiri, õpitav_aine_lbl, valitud_aine_var
+    try:
+        õpitav_aine_lbl.destroy()
+    except:
+        nimekiri.destroy()
     nimekiri.destroy()
     õpitav_aine_lbl = ttk.Label(tab1, text=valitud_aine_var.get(), font=("consolas", 30))
-    õpitav_aine_lbl.place(relx=0.5, rely=0.75)
+    õpitav_aine_lbl.place(relx=0.5, rely=0.75, anchor='center')
 def label_to_option():
     global nimekiri, õpitav_aine_lbl, valitud_aine_var
     õpitav_aine_lbl.destroy()
     nimekiri = OptionMenu(tab1, valitud_aine_var, *sisu)
-    nimekiri.place(relx=0.5, rely=0.75)
+    nimekiri.place(relx=0.5, rely=0.75, anchor='center')
 
 
 
