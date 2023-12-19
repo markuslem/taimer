@@ -237,7 +237,7 @@ def option_to_label():
 def label_to_option():
     global nimekiri, õpitav_aine_lbl, valitud_aine_var
     õpitav_aine_lbl.destroy()
-    nimekiri = OptionMenu(tab1, valitud_aine_var, *sisu)
+    nimekiri = ttk.OptionMenu(tab1, valitud_aine_var, *sisu)
     nimekiri.place(relx=0.5, rely=0.75, anchor='center')
 
 
