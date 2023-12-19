@@ -29,6 +29,8 @@ aeg.set(õppimine)
 taimer = tk.Label(tab1, textvariable=aeg, font=("consolas", 60))
 taimer.place(relx=.5, rely=.5, anchor="center")
 
+värvid=["Red","Blue","Yellow","Green", "Orage", "Violet", "Black", "Aqua", "Grey", "Orange"]
+
 
 #Kui aeg parajasti ei jookse, siis vajutades nuppu start jooksutatakse kas õppimise_aja_määramine() või puhkamise_aja_määramine() (kordamööda)
 def õppimise_aja_määramine():
@@ -181,7 +183,7 @@ def uuenda_statistika_lehekülge():
     with open('kulutatud_aeg.csv', encoding='UTF-8') as f:
         sisu = [x.strip().split(",") for x in f.readlines()]
         
-        tree = ttk.Treeview(tab2, column=("c1", "c2"), show='headings', height=len(sisu))
+        tree = ttk.Treeview(tab2, column=("c1", "c2"), show='headings', height=len(sisu)-1)
         tree.column("# 1", anchor=CENTER)
         tree.heading("# 1", text="Õppeaine")
         tree.column("# 2", anchor=CENTER)
@@ -204,20 +206,21 @@ def uuenda_statistika_lehekülge():
     canvas = Canvas(tab2,width=500,height=500)
     canvas.place(x=200, y=200)
 
-    def createPieChart(PieV,colV):
+    def createPieChart(PieV,värvid):
         st = 0
         coord = 100, 100, 300, 300
         total = sum(PieV)
-        for val,col in zip(PieV,colV):  
+        for val,col in zip(PieV,värvid):  
             extent = (val / total) * 360   
             canvas.create_arc(coord,start=st,extent = extent,fill=col,outline=col)
             st += extent 
 
     PieV=[float(x[1]) for x in sisu[2:]]
-    colV=["Red","Blue","Yellow","Green", "Orage", "Violet", "Black", "Aqua", "Grey", "Orange"]
-    colV=colV[:len(PieV)]
-    print(PieV,colV)
-    createPieChart(PieV,colV)   
+    global värvid
+    
+    värvid=värvid[:len(PieV)]
+    print(PieV,värvid)
+    createPieChart(PieV,värvid)   
 
 
 
