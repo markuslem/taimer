@@ -29,7 +29,7 @@ aeg.set(õppimine)
 taimer = tk.Label(tab1, textvariable=aeg, font=("consolas", 60))
 taimer.place(relx=.5, rely=.5, anchor="center")
 
-värvid = ["Red", "Blue", "Green", "Yellow", "Orange", "Purple", "Cyan", "Magenta", "Brown", "Pink"]
+värvid = ["Red", "Blue", "Green", "Orange", "Purple", "Cyan", "Magenta", "Brown", "Pink", "Black"]
 
 
 #Kui aeg parajasti ei jookse, siis vajutades nuppu start jooksutatakse kas õppimise_aja_määramine() või puhkamise_aja_määramine() (kordamööda)
