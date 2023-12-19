@@ -53,7 +53,7 @@ def muutus_ajas():
             sekundid -= 1
             if töötamine == True: sessiooni_aeg += 1 #käib õppimise sessioon, mitte puhkus
             tunnid = sekundid // 3600
-            minutid = sekundid // 60
+            minutid = (sekundid % 3600) // 60
             sekundid = sekundid % 60
 
             #kui mõni null on puudu, lisatakse see sõne ette. Nt jäänud on 5 sekundit -> "05"
@@ -174,7 +174,7 @@ def eemalda_statistika_lehekülg():
 
 
 def uuenda_statistika_lehekülge():
-    #statistika leht
+    #statistika tabel
     global statistika_pealkiri, tree
     statistika_pealkiri = ttk.Label(tab2, text="Statistika", font=("consolas", 60))
     statistika_pealkiri.pack()
@@ -198,6 +198,28 @@ def uuenda_statistika_lehekülge():
             tree.insert('', 'end', values=(õppeaine, kulunud_aeg))
 
         tree.pack()
+
+    #pie chart
+    
+    canvas = Canvas(tab2,width=500,height=500)
+    canvas.place(x=200, y=200)
+
+    def createPieChart(PieV,colV):
+        st = 0
+        coord = 100, 100, 300, 300
+        total = sum(PieV)
+        for val,col in zip(PieV,colV):  
+            extent = (val / total) * 360   
+            canvas.create_arc(coord,start=st,extent = extent,fill=col,outline=col)
+            st += extent 
+
+    PieV=[float(x[1]) for x in sisu[2:]]
+    colV=["Red","Blue","Yellow","Green", "Orage", "Violet", "Black", "Aqua", "Grey", "Orange"]
+    colV=colV[:len(PieV)]
+    print(PieV,colV)
+    createPieChart(PieV,colV)   
+
+
 
 def option_to_label():
     global valitud_aine_var, õpitav_aine_lbl, nimekiri
