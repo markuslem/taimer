@@ -86,6 +86,7 @@ def paus_func():
     global paus, sessiooni_aeg
     paus = True
     uuenda_statistikat(sessiooni_aeg)
+    label_to_option()
     sessiooni_aeg = 0
 
 def start():
@@ -102,6 +103,7 @@ def start():
         else:
             puhkamise_aja_määramine()
         muutus_ajas()
+    option_to_label()
 
     aeg_jookseb = True
     
@@ -124,7 +126,7 @@ def uuenda_statistikat(sessiooni_aeg):
     df.loc[df['õppeaine'] == 'kokku', 'aeg'] += sessiooni_aeg # kokku aja uuendamine
     
     # vastava õppeaine aja uuendamine
-    valitu = valitud_aine.get()
+    valitu = valitud_aine_var.get()
     if df['õppeaine'].isin([valitu]).any():
         df.loc[df['õppeaine'] == valitu, 'aeg'] += sessiooni_aeg
     #juhul kui õppeainet ei ole kulutatud_aeg.csv failis
@@ -135,9 +137,12 @@ def uuenda_statistikat(sessiooni_aeg):
     
     df.to_csv("kulutatud_aeg.csv", index=False, columns=['õppeaine', 'aeg'])
 
-    eemalda_statistika_lehekülg()
-    uuenda_statistika_lehekülge()
-    
+    try: 
+        eemalda_statistika_lehekülg()
+        uuenda_statistika_lehekülge()
+    except TclError: #kui lehekülg on juba suletud
+        pass
+        
 
 
 paus = True
@@ -156,10 +161,10 @@ with open('ained.txt', encoding='UTF-8') as f:
     sisu = f.readlines()
     sisu = [x.strip() for x in sisu]
 
-    valitud_aine = StringVar()
-    valitud_aine.set(sisu[0])
+    valitud_aine_var = StringVar()
+    valitud_aine_var.set(sisu[0])
 
-    nimekiri = OptionMenu(tab1, valitud_aine, *sisu)
+    nimekiri = OptionMenu(tab1, valitud_aine_var, *sisu)
     nimekiri.place(relx=0.5, rely=0.75)
 
 def eemalda_statistika_lehekülg():
@@ -193,6 +198,20 @@ def uuenda_statistika_lehekülge():
             tree.insert('', 'end', values=(õppeaine, kulunud_aeg))
 
         tree.pack()
+
+def option_to_label():
+    global valitud_aine_var, õpitav_aine_lbl, nimekiri
+    nimekiri.destroy()
+    õpitav_aine_lbl = ttk.Label(tab1, text=valitud_aine_var.get(), font=("consolas", 30))
+    õpitav_aine_lbl.place(relx=0.5, rely=0.75)
+def label_to_option():
+    global nimekiri, õpitav_aine_lbl, valitud_aine_var
+    õpitav_aine_lbl.destroy()
+    nimekiri = OptionMenu(tab1, valitud_aine_var, *sisu)
+    nimekiri.place(relx=0.5, rely=0.75)
+
+
+
 uuenda_statistika_lehekülge()
 
 window.mainloop()
