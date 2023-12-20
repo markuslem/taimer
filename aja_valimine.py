@@ -3,10 +3,11 @@ from tkinter import ttk
 import tkinter as tk
 from tkcalendar import *
 import pandas as pd
-from datetime import datetime
 
 
 õppeained = []
+valik_aeg, valik_aeg1 = None, None
+
 
 def keritav(start_hour=None, start_minute=None, start_second=None):
     #numbrite kerimine
@@ -168,7 +169,6 @@ def keritav(start_hour=None, start_minute=None, start_second=None):
             read = f.readlines()
         with open("ained.txt", "w", encoding="UTF-8") as f:
             for rida in read:
-                print(rida.strip(), aine_text.strip())
                 if rida.strip() != aine_text.strip() and rida.strip() != "":
                     f.write(rida.strip() + "\n")
 

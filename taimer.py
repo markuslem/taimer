@@ -147,33 +147,6 @@ def uuenda_statistikat(sessiooni_aeg):
         uuenda_statistika_lehekülge()
     except TclError: #kui lehekülg on juba suletud
         pass
-        
-
-
-paus = True
-töötamine = True #töötamine = True, kui käsil on õppimissessioon, töötamine = False, kui käsil on puhkepaus
-aeg_jookseb = False #selleks, et start nuppu mitu korda vajutades ei panda aega alusest peale käima
-
-sessiooni_aeg = 0
-
-start_nupp = ttk.Button(tab1, text="Start", command=start)
-start_nupp.place(in_=taimer, relx=0.7, x=0, rely=1.2, anchor='center')
-
-paus_nupp = ttk.Button(tab1, text="Paus", command=paus_func)
-paus_nupp.place(in_=taimer, rely=1.2, relx=0.3, anchor='center')
-nimekiri_nupp = ttk.Style()
-nimekiri_nupp.configure('My.TButton', foreground='black', background='lightblue', font=('Arial', 12))
-
-with open('ained.txt', encoding='UTF-8') as f:
-    sisu = f.readlines()
-    sisu = [x.strip() for x in sisu]
-
-    valitud_aine_var = StringVar(tab1)
-    valitud_aine_var.set(sisu[0])
-
-
-    nimekiri = ttk.OptionMenu(tab1, valitud_aine_var, sisu[0], *sisu)
-    nimekiri.place(relx=0.5, rely=0.75, anchor='center')
 
 def eemalda_statistika_lehekülg():
     global statistika_pealkiri, tree
@@ -225,8 +198,9 @@ def uuenda_statistika_lehekülge():
 
     PieV=[float(x[1]) for x in sisu[2:]]
     
-    värvid_pikkusega=värvid[:len(PieV)]
-    createPieChart(PieV,värvid_pikkusega)   
+    if max(PieV) != 0:
+        värvid_pikkusega=värvid[:len(PieV)]
+        createPieChart(PieV,värvid_pikkusega)   
 
 
 
@@ -243,10 +217,38 @@ def option_to_label():
 def label_to_option():
     global nimekiri, õpitav_aine_lbl, valitud_aine_var, õpitav_aine_text
     õpitav_aine_lbl.destroy()
-    print(õpitav_aine_text)
     valitud_aine_var.set(õpitav_aine_text)
     nimekiri = ttk.OptionMenu(tab1, valitud_aine_var, õpitav_aine_text, *sisu)
     nimekiri.place(relx=0.5, rely=0.75, anchor='center')
+        
+
+
+paus = True
+töötamine = True #töötamine = True, kui käsil on õppimissessioon, töötamine = False, kui käsil on puhkepaus
+aeg_jookseb = False #selleks, et start nuppu mitu korda vajutades ei panda aega alusest peale käima
+
+sessiooni_aeg = 0
+
+start_nupp = ttk.Button(tab1, text="Start", command=start)
+start_nupp.place(in_=taimer, relx=0.7, x=0, rely=1.2, anchor='center')
+
+paus_nupp = ttk.Button(tab1, text="Paus", command=paus_func)
+paus_nupp.place(in_=taimer, rely=1.2, relx=0.3, anchor='center')
+nimekiri_nupp = ttk.Style()
+nimekiri_nupp.configure('My.TButton', foreground='black', background='lightblue', font=('Arial', 12))
+
+with open('ained.txt', encoding='UTF-8') as f:
+    sisu = f.readlines()
+    sisu = [x.strip() for x in sisu]
+
+    valitud_aine_var = StringVar(tab1)
+    valitud_aine_var.set(sisu[0])
+
+
+    nimekiri = ttk.OptionMenu(tab1, valitud_aine_var, sisu[0], *sisu)
+    nimekiri.place(relx=0.5, rely=0.75, anchor='center')
+
+
 
 
 
