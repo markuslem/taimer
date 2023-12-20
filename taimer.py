@@ -77,6 +77,7 @@ def muutus_ajas():
             if sekundid == "00" and minutid == "00" and tunnid == "00":
                 aeg_jookseb = False
                 taimer_punaseks()
+                label_to_option()
                 uuenda_statistikat(sessiooni_aeg)
                 sessiooni_aeg = 0
                 if töötamine == False:
@@ -93,7 +94,7 @@ def paus_func():
     global paus, sessiooni_aeg
     paus = True
     uuenda_statistikat(sessiooni_aeg)
-    label_to_option()
+    if töötamine: label_to_option()
     sessiooni_aeg = 0
 
 def start():
@@ -108,7 +109,7 @@ def start():
         else:
             puhkamise_aja_määramine()
         muutus_ajas()
-    option_to_label()
+    if töötamine: option_to_label()
 
     aeg_jookseb = True
     
