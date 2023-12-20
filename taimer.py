@@ -9,10 +9,16 @@ import pandas as pd
 from aja_valimine import õppimine, puhkamine
 
 window = Tk()
+#getting screen width and height of display
+width= window.winfo_screenwidth() 
+height= window.winfo_screenheight()
+#setting tkinter window size
+window.geometry("%dx%d" % (width, height))
+window.state('zoomed')
+
 frame = ttk.Frame(window, padding=10)
 frame.pack()
 frame.place()
-window.geometry("1920x1800")
 
 #sakkide lisamine lehele
 tabControl = ttk.Notebook(window)
