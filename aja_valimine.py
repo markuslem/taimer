@@ -152,9 +152,11 @@ def keritav(start_hour=None, start_minute=None, start_second=None):
     def uuenda_faili():
         
         rida = eemalda_väli()
+        with open("ained.txt", encoding="UTF-8") as f:
+            f_pikkus = len(f.readlines())
         
         
-        if rida.strip() != "":
+        if rida.strip() != "" and f_pikkus < 9:
             with open("ained.txt", "a", encoding="utf8") as f:
 
                 f.write(rida.strip() + "\n") #faili pikkus 

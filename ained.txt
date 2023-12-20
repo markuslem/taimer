@@ -3,3 +3,7 @@ ilukirjandus
 ajalugu
 geoloogia
 matemaatika
+kirjandus
+inglise keel
+saksa keel
+programmeerimine
